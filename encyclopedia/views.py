@@ -4,6 +4,7 @@ import markdown
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django import forms
+import random
 
 
 
@@ -89,3 +90,11 @@ def saveEdit(request):
             "entry": html,
             "entryTitle": entryTitle
         })
+
+def randomEntry(request):
+    entryR=random.choice(util.list_entries())
+    entryPage = util.get_entry(entryR)
+    return render(request, "encyclopedia/entry.html", {
+        "entry": markdown.markdown(entryPage),
+        "entryTitle": entryR
+    })
