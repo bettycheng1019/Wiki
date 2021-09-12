@@ -21,7 +21,8 @@ def entry(request, entry):
         })
     else:
         return render(request, "encyclopedia/entry.html", {
-            "entry": markdown.markdown(entryPage)
+            "entry": markdown.markdown(entryPage),
+            "entryTitle": entry
         })
 
 def search(request):
@@ -43,8 +44,8 @@ def search(request):
              })
 
 class NewEntryForm(forms.Form):
-    entryTitle = forms.CharField(label="New Entry")
-    entryContent = forms.CharField(label="New Content")
+    entryTitle = forms.CharField(label="New Entry", widget=forms.TextInput(attrs={'class': 'form-control col-md-10 cl-lg-10'}))
+    entryContent = forms.CharField(label="New Content", widget=forms.Textarea(attrs={'class': 'form-control col-md-10 cl-lg-10','rows':10}))
     
 def add(request):
     if request.method == "POST":
@@ -69,20 +70,22 @@ def add(request):
         "form": NewEntryForm()
     })
 
-# class EditForm(forms.Form):
-#     edit = forms.CharField(label="New Content")
+def editPage(request):
+        if request.method == 'POST':
+            input_title = request.POST['title']
+            text = util.get_entry(input_title)
+        return render(request, "encyclopedia/editPage.html",{
+            "entry": text,
+            "entryTitle": input_title
+        })
 
-# def edit(request):
-#     if request.method == "POST":
-#         new_content = EditForm(request.POST)
-#         if new_content.is_valid():
-#             edit = new_content.cleaned_data["entryContentNew"]
-#             util.save_entry(entry, edit)
-#                 return HttpResponseRedirect(reverse('entry'))
-#         else:
-#             return render(request, "encyclopedia/edit.html", {
-#                 "form": new_content
-#             })
-#     return render(request, "encyclopedia/edit.html", {
-#         "form": EditForm()
-#     })
+def saveEdit(request):
+    if request.method == 'POST':
+        entryTitle = request.POST['title']
+        entry = request.POST['text']
+        util.save_entry(entryTitle, entry)
+        html = markdown.markdown(util.get_entry(entryTitle))
+        return render (request, "encyclopedia/entry.html",{
+            "entry": html,
+            "entryTitle": entryTitle
+        })
