@@ -72,24 +72,24 @@ def add(request):
         "form": NewEntryForm()
     })
 
-def editPage(request):
+def edit(request):
         if request.method == 'POST':
-            input_title = request.POST['title']
-            text = util.get_entry(input_title)
+            title = request.POST['title']
+            content = util.get_entry(title)
         return render(request, "encyclopedia/editPage.html",{
-            "entry": text,
-            "entryTitle": input_title
+            "entry": content,
+            "entryTitle": title
         })
 
-def saveEdit(request):
+def save(request):
     if request.method == 'POST':
         entryTitle = request.POST['title']
         entry = request.POST['text']
         util.save_entry(entryTitle, entry)
         util.remove_fl(entryTitle)
-        html = markdown.markdown(util.get_entry(entryTitle))
+        content = markdown.markdown(util.get_entry(entryTitle))
         return render (request, "encyclopedia/entry.html",{
-            "entry": html,
+            "entry": content,
             "entryTitle": entryTitle
         })
 

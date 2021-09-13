@@ -6,7 +6,7 @@
 
 {% block body %}
 
-    <form action="{% url 'saveEdit' %}" method="POST">
+    <form action="{% url 'save' %}" method="POST">
     	{% csrf_token %}
     	<div class="form-group">
     		<h2 class="form-titles">Edit {{entryTitle}}</h2>
@@ -15,7 +15,7 @@
 		
 		<div class="form-group">
 			<label class="form-titles">content</label>
-        		<textarea class="form-control" name="text" id="exampleFormControlTextarea1" rows="8">{{entry}}</textarea>
+        		<textarea class="form-control" name="text" rows="8">{{entry}}</textarea>
 		</div>
 			<button type="submit" class="btn btn-outline-dark">Submit</button>
 	</form>
