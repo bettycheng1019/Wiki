@@ -36,7 +36,7 @@ def search(request):
             if search.upper() in entry.upper():
                 result.append(entry)
         if not result:
-            return render(request, "encyclopedia/page_not_found.html", {
+            return render(request, "encyclopedia/noresult.html", {
             "entryTitle": search
         })
         else:
