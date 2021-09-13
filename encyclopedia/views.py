@@ -57,7 +57,8 @@ def add(request):
             if util.get_entry(entryT) is None:
                 util.save_entry(entryT, entryC)
                 return render(request, "encyclopedia/entry.html", {
-                    "entry": markdown.markdown(util.get_entry(entryT))
+                    "entry": markdown.markdown(util.get_entry(entryT)),
+                    "entryTitle": entryT
                 })
             else:
                 return render(request, "encyclopedia/error.html", {
@@ -85,6 +86,7 @@ def saveEdit(request):
         entryTitle = request.POST['title']
         entry = request.POST['text']
         util.save_entry(entryTitle, entry)
+        util.remove_fl(entryTitle)
         html = markdown.markdown(util.get_entry(entryTitle))
         return render (request, "encyclopedia/entry.html",{
             "entry": html,
